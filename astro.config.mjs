@@ -11,6 +11,7 @@ import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://supernbk1ng-supernbkingblog.vercel.app',
   adapter: vercel(),
   output: 'server',
   vite: {
