@@ -1,0 +1,29 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const projects = await getCollection('projects');
+// You might want to sort by some criteria if you add a date or order field
+// projects.sort((a, b) => ...);
+---
+
+<Layout title="项目 | 我的个人主页" description="我的个人项目和开源贡献展示。">
+	<div class="mb-12">
+		<h1 class="text-3xl font-bold tracking-tight mb-4">项目</h1>
+		<p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl">
+			我的作品集，涵盖 Web 应用到开源库。
+		</p>
+	</div>
+
+	<div class="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
+		{
+			projects.map((project) => (
+				<ProjectCard project={project} />
+			))
+		}
+        {projects.length === 0 && (
+            <p class="col-span-full text-center py-12 text-gray-500 italic">暂无项目。</p>
+        )}
+	</div>
+</Layout>

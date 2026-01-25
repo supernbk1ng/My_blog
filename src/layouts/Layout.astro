@@ -1,3 +1,14 @@
+---
+import '../styles/global.css';
+import 'katex/dist/katex.min.css';
+
+interface Props {
+	title: string;
+    description?: string;
+}
+
+const { title, description = "A minimalist personal portfolio." } = Astro.props;
+---
 <!doctype html>
 <html lang="en">
 	<head>
@@ -6,10 +17,24 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+        <meta name="description" content={description} />
+		<title>{title}</title>
 	</head>
-	<body>
-		<slot />
+	<body class="bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 antialiased min-h-screen flex flex-col">
+        <header class="py-6 px-4 md:px-8 max-w-4xl mx-auto w-full flex justify-between items-center">
+            <a href="/" class="text-xl font-bold tracking-tight">我的个人主页</a>
+            <nav class="flex gap-4 text-sm font-medium text-gray-600 dark:text-gray-400">
+                <a href="/blog" class="hover:text-black dark:hover:text-white transition-colors">博客</a>
+                <a href="/projects" class="hover:text-black dark:hover:text-white transition-colors">项目</a>
+                <a href="/about" class="hover:text-black dark:hover:text-white transition-colors">关于</a>
+            </nav>
+        </header>
+		<main class="flex-grow px-4 md:px-8 max-w-4xl mx-auto w-full py-10">
+			<slot />
+		</main>
+        <footer class="py-6 text-center text-sm text-gray-500 dark:text-gray-500">
+            &copy; {new Date().getFullYear()} My Name. 保留所有权利。
+        </footer>
 	</body>
 </html>
 

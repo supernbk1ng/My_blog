@@ -1,0 +1,43 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const tags = [...new Set(posts.flatMap((post) => post.data.tags || []))].sort();
+---
+
+<Layout title="博客 | 我的个人主页" description="关于 Web 开发的思考、教程和见解。">
+	<div class="mb-12">
+		<h1 class="text-3xl font-bold tracking-tight mb-4">博客</h1>
+		<p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl">
+			探索 Web 开发的世界。在这里，你可以找到关于 Astro、React、Tailwind CSS 等技术的文章。
+		</p>
+	</div>
+
+	<!-- Tags Filter (Optional future enhancement: make these functional with query params or client-side filtering) -->
+	{tags.length > 0 && (
+		<div class="flex flex-wrap gap-2 mb-10">
+			<span class="text-sm font-medium text-gray-500 py-1">话题:</span>
+			{tags.map((tag) => (
+				<span class="px-3 py-1 text-sm rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+					#{tag}
+				</span>
+			))}
+		</div>
+	)}
+
+	<div class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+		{
+			posts.map((post) => (
+				<PostCard post={post} />
+			))
+		}
+        {posts.length === 0 && (
+            <p class="col-span-full text-center py-12 text-gray-500 italic">暂无文章，敬请期待！</p>
+        )}
+	</div>
+</Layout>

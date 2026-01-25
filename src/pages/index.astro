@@ -1,11 +1,52 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// Fetch latest 3 blog posts
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+).slice(0, 3);
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="主页 | 我的个人主页">
+	<!-- Hero Section -->
+	<section class="mb-16">
+		<h1 class="text-4xl font-bold mb-6 tracking-tight">
+			你好，我是 <span class="text-blue-600 dark:text-blue-400">开发者</span>。
+		</h1>
+		<p class="text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl">
+			我是一名全栈工程师，热衷于构建极简、高性能的 Web 应用。
+			这个站点是我的数字花园，用于分享学习历程、项目经验和对现代 Web 开发的思考。
+		</p>
+		<div class="mt-8 flex gap-4">
+			<a href="/projects" class="px-6 py-3 bg-gray-900 text-white dark:bg-white dark:text-gray-900 font-medium rounded-lg hover:opacity-90 transition-opacity">
+				查看项目
+			</a>
+			<a href="/about" class="px-6 py-3 border border-gray-300 dark:border-gray-700 font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+				关于我
+			</a>
+		</div>
+	</section>
+
+	<!-- Recent Updates Section -->
+	<section>
+		<div class="flex justify-between items-baseline mb-8">
+			<h2 class="text-2xl font-bold">最近更新</h2>
+			<a href="/blog" class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
+				查看所有文章 &rarr;
+			</a>
+		</div>
+
+		<div class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+			{
+				posts.map((post) => (
+					<PostCard post={post} />
+				))
+			}
+            {posts.length === 0 && (
+                <p class="text-gray-500 italic">暂无文章。敬请期待！</p>
+            )}
+		</div>
+	</section>
 </Layout>

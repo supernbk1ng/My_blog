@@ -1,0 +1,76 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getEntry } from 'astro:content';
+
+const aboutEntry = await getEntry('about', 'index');
+
+if (!aboutEntry) {
+  throw new Error('About page data not found');
+}
+
+const { Content } = await aboutEntry.render();
+const { headline, skills, experience, socialLinks } = aboutEntry.data;
+---
+
+<Layout title={`${headline} | 我的个人主页`} description="我的专业背景和技能。">
+	<div class="max-w-2xl mx-auto">
+		<h1 class="text-3xl font-bold tracking-tight mb-8">{headline}</h1>
+
+		<div class="prose dark:prose-invert mb-12">
+            <Content />
+		</div>
+
+		<!-- Skills Section -->
+		<section class="mb-12">
+			<h2 class="text-2xl font-bold mb-6">技能</h2>
+			<div class="flex flex-wrap gap-2">
+				{skills.map((skill) => (
+					<span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg text-sm font-medium">
+						{skill}
+					</span>
+				))}
+			</div>
+		</section>
+
+		<!-- Experience Section -->
+		<section class="mb-12">
+			<h2 class="text-2xl font-bold mb-6">工作经历</h2>
+			<div class="space-y-8">
+				{experience.map((job) => (
+					<div class="border-l-2 border-gray-200 dark:border-gray-800 pl-4">
+						<h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">{job.role}</h3>
+						<p class="text-sm text-gray-500 mb-2">{job.company} • {job.period}</p>
+						<p class="text-gray-600 dark:text-gray-400">
+							{job.description}
+						</p>
+					</div>
+				))}
+			</div>
+		</section>
+
+		<!-- Contact Section -->
+		<section>
+			<h2 class="text-2xl font-bold mb-6">联系方式</h2>
+			<p class="text-gray-600 dark:text-gray-400 mb-4">
+				我随时欢迎新的机会和合作。欢迎联系我！
+			</p>
+			<div class="flex gap-4">
+                {socialLinks?.email && (
+                    <a href={`mailto:${socialLinks.email}`} class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors">
+                        给我发邮件
+                    </a>
+                )}
+                {socialLinks?.github && (
+                    <a href={socialLinks.github} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-700 text-base font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        GitHub
+                    </a>
+                )}
+                {socialLinks?.twitter && (
+                    <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-700 text-base font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        Twitter
+                    </a>
+                )}
+			</div>
+		</section>
+	</div>
+</Layout>
