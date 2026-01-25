@@ -1,5 +1,6 @@
 import { config, fields, collection, singleton } from '@keystatic/core';
 
+// Keystatic config
 export default config({
   storage: import.meta.env.PROD
     ? {
